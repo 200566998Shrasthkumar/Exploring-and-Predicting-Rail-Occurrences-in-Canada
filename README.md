@@ -41,7 +41,7 @@ railway-safety-analysis/
    ```
 2. Navigate to the project directory:
    ```bash
-   cd railway-safety-analysis
+   cd Exploring-and-Predicting-Rail-Occurrences-in-Canada
    ```
 3. Install dependencies:
    ```bash
@@ -49,7 +49,7 @@ railway-safety-analysis/
    ```
 
 ## Usage
-- Run the Jupyter notebooks inside the `notebooks/` directory to explore the data.
+- Run the Jupyter notebooks inside the `reports/` directory to explore the data.
 - Modify the `src/` scripts to preprocess and analyze the data further.
 - Use visualization tools to create dashboards based on the processed data.
 
