@@ -20,7 +20,7 @@ The dataset is sourced from the official TSB website and includes information su
 
 ## Technologies Used
 - **Programming Languages:** Python
-- **Libraries:** Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn,nltk,spaCy,gensim
+- **Libraries:** Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn
 - **Visualization Tools:** Tableau / Power BI
 - **Version Control:** GitHub
 
