@@ -5,8 +5,9 @@ This project analyzes railway safety data from the [Transportation Safety Board 
 
 ## Objectives
 - To perform exploratory data analysis (EDA) on railway safety data.
-- To identify trends and patterns in railway accidents and incidents.
-- To develop predictive models for accident forecasting.
+- To conduct geospatial mapping to accident hotspots.
+- Perform topic modelling to identify and uncover trends and patterns in railway accidents and incidents.
+- To develop predictive models for accident and severity forecasting.
 - To visualize key findings for better understanding and communication.
 
 ## Dataset
@@ -19,7 +20,7 @@ The dataset is sourced from the official TSB website and includes information su
 
 ## Technologies Used
 - **Programming Languages:** Python
-- **Libraries:** Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn
+- **Libraries:** Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn,nltk,spaCy,gensim
 - **Visualization Tools:** Tableau / Power BI
 - **Version Control:** GitHub
 
