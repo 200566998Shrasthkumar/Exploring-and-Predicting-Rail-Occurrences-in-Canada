@@ -26,7 +26,7 @@ The dataset is sourced from the official TSB website and includes information su
 ## Project Structure
 ```
 railway-safety-analysis/
-│-- datasets/               # Raw dataset
+│-- datasets/            # Raw dataset
 │-- src/                # Source code for data processing and analysis
 │-- reports/            # Jupyter notebooks for generated reports and visualizations
 │-- README.md           # Project documentation
