@@ -3,7 +3,7 @@
 # Description: Main Program                                              #
 ##########################################################################
 
-import filter_dataset
+import src.filter_dataset as filter_dataset
 
 occurance_dataset = filter_dataset.load_and_filter_dataset('datasets/OCCURRENCE_PUBLIC.csv', 5000, 'Fre')
 injuries_dataset = filter_dataset.load_and_filter_dataset('datasets/INJURIES_PUBLIC.csv', 10)
