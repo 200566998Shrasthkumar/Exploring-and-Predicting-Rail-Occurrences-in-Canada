@@ -20,16 +20,15 @@ The dataset is sourced from the official TSB website and includes information su
 ## Technologies Used
 - **Programming Languages:** Python
 - **Libraries:** Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn
-- **Visualization Tools:** Tableau / Power BI (if applicable)
+- **Visualization Tools:** Tableau / Power BI
 - **Version Control:** GitHub
 
 ## Project Structure
 ```
 railway-safety-analysis/
-│-- data/               # Raw and processed data
-│-- notebooks/          # Jupyter notebooks for analysis
+│-- datasets/               # Raw dataset
 │-- src/                # Source code for data processing and analysis
-│-- reports/            # Generated reports and visualizations
+│-- reports/            # Jupyter notebooks for generated reports and visualizations
 │-- README.md           # Project documentation
 │-- requirements.txt    # Dependencies
 │-- .gitignore          # Files to ignore
@@ -38,7 +37,7 @@ railway-safety-analysis/
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/railway-safety-analysis.git
+   git clone https://github.com/200566998Shrasthkumar/Exploring-and-Predicting-Rail-Occurrences-in-Canada.git
    ```
 2. Navigate to the project directory:
    ```bash
@@ -79,6 +78,6 @@ Shrasth Kumar
 This project is License free.
 
 ## Contact
-200573392@student.georgianc.on.ca
-200566998@student.georgianc.on.ca
+- 200573392@student.georgianc.on.ca
+- 200566998@student.georgianc.on.ca
 
