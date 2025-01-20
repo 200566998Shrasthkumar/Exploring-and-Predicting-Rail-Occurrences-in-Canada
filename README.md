@@ -71,8 +71,8 @@ railway-safety-analysis/
 - Automate data processing pipelines.
 
 ## Contributors
-Steve Kuruvilla 
-Shrasth Kumar
+- Steve Kuruvilla 
+- Shrasth Kumar
 
 ## License
 This project is License free.
