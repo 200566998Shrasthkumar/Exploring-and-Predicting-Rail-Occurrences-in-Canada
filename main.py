@@ -25,9 +25,12 @@ import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+import matplotlib.pyplot as plt
 
-# Load your DataFrames (replace with your actual file paths)
+# Loading DataFrames
 df1 = pd.read_csv("Occurence_details.csv")  # Occurrence Details
 df2 = pd.read_csv("Off_train_casualties.csv")  # Off-Train Injuries
 df3 = pd.read_csv("Train_details.csv")  # Train Details
@@ -36,39 +39,58 @@ df3 = pd.read_csv("Train_details.csv")  # Train Details
 df = pd.merge(df1, df2[['OccNo', 'TotalOffTrainFatalities']], on='OccNo', how='left')
 df['TotalOffTrainFatalities'].fillna(0, inplace=True)
 
-# Aggregate Train Details (DataFrame 3)
+# Aggregate Train Details
 train_agg = df3.groupby('OccNo').agg(
-    NumTrains=('TrainSeq', 'nunique'),  # Number of unique trains involved
-    # Add other aggregations if needed (e.g., types of trains)
+    NumTrains=('TrainSeq', 'nunique'),
+
 ).reset_index()
 df = pd.merge(df, train_agg, on='OccNo', how='left')
 
-# 2. Feature Selection (Expanded)
+# 2. Feature Selection 
 features = ['OccurrenceTypeID', 'NumberTrainsInvolved', 'ActivityTypeID', 'SubdNameID',
-            'TotalRSInvolved', 'DGCarsInvolvedIND', 'TotalOffTrainFatalities', 'NumTrains']  # Added NumTrains
+            'TotalRSInvolved', 'DGCarsInvolvedIND', 'TotalOffTrainFatalities', 'NumTrains',
+            'RegionOfOccurrence', 'OccYear']  # Added RegionOfOccurrence and OccYear
 target = 'TotalFatalInjuries'
 
 X = df[features]
 y = df[target]
 
-# 3. One-Hot Encoding
-categorical_features = ['OccurrenceTypeID', 'ActivityTypeID', 'SubdNameID']
-encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
-X_encoded = encoder.fit_transform(X[categorical_features])
-X_encoded_df = pd.DataFrame(X_encoded, columns=encoder.get_feature_names_out(categorical_features))
-X = X.drop(categorical_features, axis=1)
-X = pd.concat([X, X_encoded_df], axis=1)
+# 3. Preprocessing with Pipeline and ColumnTransformer
+# Defining categorical and numerical features
+categorical_features = ['OccurrenceTypeID', 'ActivityTypeID', 'SubdNameID', 'RegionOfOccurrence']
+numerical_features = ['NumberTrainsInvolved', 'TotalRSInvolved', 'TotalOffTrainFatalities', 'NumTrains', 'OccYear']
+
+# Create transformers for categorical and numerical features
+categorical_transformer = Pipeline(steps=[
+    ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+])
+numerical_transformer = Pipeline(steps=[
+    ('scaler', StandardScaler())  # Added StandardScaler for numerical features
+])
+
+# Combine transformers using ColumnTransformer
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('cat', categorical_transformer, categorical_features),
+        ('num', numerical_transformer, numerical_features)
+    ])
 
 # 4. Train-Test Split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 5. Hyperparameter Tuning using GridSearchCV
+# 5. Hyperparameter Tuning using GridSearchCV with Pipeline
+# Create a pipeline with preprocessing and model
+pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('model', RandomForestRegressor(random_state=42))
+])
+
 param_grid = {
-    'n_estimators':,
-    'max_depth': [None, 5, 10],
+    'model__n_estimators': [100, 200, 300],
+    'model__max_depth': [None, 5, 10],
     # Add other hyperparameters to tune
 }
-grid_search = GridSearchCV(estimator=RandomForestRegressor(random_state=42),
+grid_search = GridSearchCV(estimator=pipeline,
                            param_grid=param_grid, cv=5, scoring='neg_mean_squared_error')
 grid_search.fit(X_train, y_train)
 best_model = grid_search.best_estimator_
@@ -76,19 +98,32 @@ best_model = grid_search.best_estimator_
 # 6. Cross-Validation
 cv_scores = cross_val_score(best_model, X_train, y_train, cv=5, scoring='neg_mean_squared_error')
 print(f"Cross-Validation Scores: {cv_scores}")
-print(f"Average CV Score: {-cv_scores.mean()}")  # Note the negative sign to get positive MSE
+print(f"Average CV Score: {-cv_scores.mean()}")
 
 # 7. Model Evaluation
 y_pred = best_model.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
-mae = mean_absolute_error(y_test, y_pred)  # Added MAE
+mae = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
 print(f"Mean Squared Error: {mse}")
-print(f"Mean Absolute Error: {mae}")  # Print MAE
+print(f"Mean Absolute Error: {mae}")
 print(f"R-squared: {r2}")
 
 # 8. Feature Importance
-feature_importances = best_model.feature_importances_
-feature_importance_df = pd.DataFrame({'Feature': X_train.columns, 'Importance': feature_importances})
+# Get feature names from the preprocessor
+feature_names = list(best_model.named_steps['preprocessor'].transformers_.named_steps['onehot'].get_feature_names_out(categorical_features)) + numerical_features
+
+# Get feature importances
+feature_importances = best_model.named_steps['model'].feature_importances_
+feature_importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': feature_importances})
 print(feature_importance_df.sort_values(by='Importance', ascending=False))
+
+# 9. Plot Feature Importances
+sorted_feature_importances = feature_importance_df.sort_values(by='Importance', ascending=False)
+plt.figure(figsize=(10, 6))
+plt.barh(sorted_feature_importances['Feature'], sorted_feature_importances['Importance'])
+plt.xlabel("Importance")
+plt.ylabel("Feature")
+plt.title("Feature Importances")
+plt.show()
