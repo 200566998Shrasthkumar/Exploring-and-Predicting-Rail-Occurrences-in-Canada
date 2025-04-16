@@ -1,0 +1,8 @@
+{
+  "label": "Exploratory Data Analysis",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "This section of the page contains Exploratory Data Analysis (EDA) focused on examining trends, patterns, and insights related to rail occurrences in Canada, using historical data to better understand the factors contributing to such events."
+  }
+}

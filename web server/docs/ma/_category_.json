@@ -1,0 +1,8 @@
+{
+  "label": "Machine Learning",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "This section of the page presents the development, training, and evaluation of machine learning models aimed at predicting rail occurrences in Canada. Leveraging historical data, the models are designed to capture complex patterns and relationships between various factors such as location, time, accident types, and operational conditions. Multiple algorithms are explored and compared based on performance metrics like accuracy, precision, recall, and F1-score. The goal is to build a reliable predictive system that can support proactive decision-making and enhance rail safety strategies"
+  }
+}
